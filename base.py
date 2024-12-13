@@ -1,6 +1,6 @@
-import csv
 import logging
 import argparse
+
 
 class Page():
     def __init__(self, size, data=None):
@@ -85,44 +85,46 @@ class Index():
 
     def menu(self):
         while True:
-            print("\n=== MENU ===")
-            print("Digite:")
-            print(" + <chave> <valor> para inserir um registro")
-            print(" - <chave> para remover um registro")
-            print(" ? <chave> para buscar um registro")
-            print(" q para sair")
-            response = input("Opção: ").strip().lower()
+            print(" + <key> <value> to insert a new record")
+            print(" - <key> to remove an existing record")
+            print(" ? <key> to search an existing record")
+            print(" q to exit")
+            response = input("Select: ").strip().lower()
 
             if response.startswith("+"):
                 record = response[1:].split()
                 if len(record) > 1:
                     record = (int(record[0]), record[1])
                     self.insert(record)
-                    print("Registro inserido:", record)
+                    print("Record inserted:", record)
                 else:
-                    print("Entrada inválida. Use: + <chave> <valor>")
+                    print("Unknow response. Use: + <key> <value>")
 
             elif response.startswith("-"):
                 key = response[1:].strip()
                 if key.isdigit():
                     self.remove(int(key))
-                    print("Registro com chave", key, "removido.")
+                    print("Record with key", key, "removed.")
                 else:
-                    print("Entrada inválida. Use: - <chave>")
+                    print("Unknow response. Use: - <key>")
 
             elif response.startswith("?"):
                 key = response[1:].strip()
                 if key.isdigit():
                     results = self.search(int(key))
                     if results:
-                        print("Registro(s) encontrado(s):", results)
+                        print("Record found:", results)
                     else:
-                        print("Nenhum registro encontrado com a chave:", key)
+                        print("Not found:", key)
                 else:
-                    print("Entrada inválida. Use: ? <chave>")
+                    print("Unknow response")
+
+            elif response == "debug":
+                for i, page in enumerate(self.pages):
+                    print(f"Page {i + 1}: {page.data}")
 
             elif response == "q":
-                print("Saindo do menu...")
+                print("Exit")
                 break
 
 
@@ -134,9 +136,8 @@ def get_size(data):
 
 def get_arguments(description):
     parser = argparse.ArgumentParser(description=description)
-    parser.add_argument("-f", "--file", help='Input file (CSV)')
+    parser.add_argument("-f", "--file", help='Input file')
     parser.add_argument("-p", "--page-size", type=int, default=256)
     parser.add_argument("-d", "--debbuging", action="store_true", default=False, help="Debug")
 
     return parser.parse_args()
-

@@ -1,7 +1,7 @@
 from base import Index
 
 if __name__ == '__main__':
-    page_size = 256
+    page_size = 256 # Tamanho da pagina
     log_file = "index.log"
     debbuging = True
 

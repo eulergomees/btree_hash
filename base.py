@@ -1,6 +1,7 @@
 import logging
 import argparse
 
+
 class Page:
     def __init__(self, size, data=None):
         # Inicializa uma página com tamanho máximo e dados opcionais.
@@ -73,6 +74,15 @@ class Index:
             results.extend(page.search(key))
         return results
 
+    def search_range(self, start_key, end_key):
+        # Busca registros com chave entre start_key e end_key.
+        results = []
+        for page in self.pages:
+            results.extend(
+                record for record in page.data if start_key <= record[0] <= end_key
+            )
+        return results
+
     def _debug(self, msg, *args, **kwargs):
         # Registra mensagens de depuração.
         self._log.debug(msg, *args, **kwargs)
@@ -93,11 +103,11 @@ class Index:
         self._log.setLevel(logging.DEBUG if self._debbuging else logging.INFO)
 
     def menu(self):
-        # Apresenta o menu para inserir, buscar ou remover registros.
         while True:
             print(" + <key> <value> to insert a new record")
             print(" - <key> to remove an existing record")
             print(" ? <key> to search an existing record")
+            print(" r <start_key> <end_key> to search records in a range")
             print(" q to exit")
             response = input("Select: ").strip().lower()
 
@@ -128,6 +138,18 @@ class Index:
                         print("Not found:", key)
                 else:
                     print("Unknow response")
+
+            elif response.startswith("r"):
+                keys = response[1:].split()
+                if len(keys) == 2 and all(k.isdigit() for k in keys):
+                    start_key, end_key = map(int, keys)
+                    results = self.search_range(start_key, end_key)
+                    if results:
+                        print("Records in range:", results)
+                    else:
+                        print("No records found in range:", start_key, "-", end_key)
+                else:
+                    print("Unknow response. Use: r <start_key> <end_key>")
 
             elif response == "debug":
                 for i, page in enumerate(self.pages):

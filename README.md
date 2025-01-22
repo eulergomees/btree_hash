@@ -9,7 +9,8 @@ O Btree Hash consiste na implementação em python de índice de árvore B+ e de
 
 - Inserção: Adicione um novo valor na árvore utilizando o comando "+ <chave> <valor >".
 - Remoção: Remove um valor já inserido na árvore utilizando o comando "- <chave> <valor>".
-- Busca: Busca um valor presente na árvore utilizando o comando "? <chave>".
+- Busca por igualdade: Busca um valor presente na árvore utilizando o comando "? <chave>".
+- Busca por intervalo: Busca valores presentes na árvore dentro de um intervalo de chaves com o comando r <chave> <chave>.
 - Finalizar o programa: Para sair do programa utilize o comando "q".
 
 ## Pré-requisitos
